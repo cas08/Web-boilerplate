@@ -1,0 +1,11 @@
+.input {
+  padding: 8px 16px 8px 8px;
+  border: 1px solid $secondary-color;
+  border-radius: 1px;
+  outline: none;
+
+  &::placeholder {
+    color: $secondary-color;
+    opacity: 1;
+  }
+}

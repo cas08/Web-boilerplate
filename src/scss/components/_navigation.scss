@@ -1,0 +1,16 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: $bp-desktop;
+
+  &__list {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+  }
+
+  &__add-btn {
+    font-size: 1.2em;
+  }
+}
