@@ -1,0 +1,11 @@
+.link {
+  text-decoration: none;
+  color: $highlight-color;
+  font-weight: 500;
+  transition: $transition;
+  font-size: 1.3em;
+
+  &:hover {
+    color: $highlight-color-hover;
+  }
+}

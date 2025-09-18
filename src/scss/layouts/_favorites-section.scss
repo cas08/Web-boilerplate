@@ -1,0 +1,65 @@
+.favorites {
+  max-width: 1120px;
+  margin: auto;
+  &__title {
+    margin-bottom: 40px;
+  }
+
+  &__row {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__arrow {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: none;
+    padding: 0;
+
+    color: $secondary-color;
+    opacity: 0.7;
+    font-size: 100px;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    margin: auto 12px;
+    float: left;
+
+    &:hover {
+      color: black;
+      opacity: 1;
+    }
+  }
+  &__arrow--next {
+    float: right;
+    margin-right: 0;
+    margin-left: 12px;
+  }
+
+  &__list {
+    overflow: hidden;
+
+    list-style: none;
+    padding: 0;
+
+    width: 1000px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 20px;
+    justify-content: space-between;
+    text-align: center;
+
+    @media (max-width: 1100px) {
+      overflow-x: auto;
+      justify-content: flex-start;
+      gap: 16px;
+    }
+  }
+}

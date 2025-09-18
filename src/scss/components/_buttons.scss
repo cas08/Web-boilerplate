@@ -1,0 +1,15 @@
+.btn {
+  padding: 8px 16px;
+  color: $highlight-color;
+  border: 1px solid $highlight-color;
+  background-color: $bg-color;
+  border-radius: 1px;
+  transition: $transition;
+  font-weight: 600;
+  text-overflow: ellipsis;
+
+  &:hover {
+    background-color: $highlight-color;
+    color: $bg-color;
+  }
+}

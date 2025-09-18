@@ -1,0 +1,35 @@
+@import "./utils/variables";
+@import "./base";
+@import "../fonts/Roboto.css";
+@import "./utils/responsive";
+
+// Components
+@import "./components/buttons";
+@import "./components/inputs";
+@import "./components/links";
+@import "./components/teacher-card";
+@import "./components/separator";
+@import "./components/h-title";
+@import "./components/navigation";
+@import "./components/add_teacher";
+@import "./components/teacher_info";
+// Layouts
+@import "./layouts/header";
+@import "./layouts/teachers-section";
+@import "./layouts/statistics-section";
+@import "./layouts/favorites-section";
+@import "./layouts/info-section";
+@import "./layouts/footer";
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+  box-shadow: -5px 0px 13px -7px $secondary-color,
+    5px 0px 13px -7px $secondary-color, -3px -1px 16px 0px rgba(0, 0, 0, 0);
+}
+
+.bold {
+  font-weight: 700;
+}
