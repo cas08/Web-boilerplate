@@ -1,0 +1,188 @@
+/* Адаптивний вигляд сторінки для ширини < 768px */
+@media (max-width: $bp-tablet) {
+  .container {
+    padding-bottom: 24px;
+  }
+
+  /* HEADER */
+  .header {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .header__container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .header__search-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header__input-search {
+    width: 100% !important; // щоб не було розширення
+  }
+
+  .header__button-search {
+    width: 100%;
+  }
+
+  .navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 40px 0 0;
+  }
+
+  .navigation__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 20px;
+  }
+
+  .navigation__add-btn {
+    max-width: 240px;
+    margin: 8px auto 0;
+  }
+
+  /* TEACHERS */
+  .teachers {
+    padding: 0 1rem;
+    margin-bottom: 40px;
+  }
+
+  .teachers__title {
+    margin-bottom: 24px;
+  }
+  .teachers__filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .teachers__filters__item {
+    width: 100%;
+    gap: 12px;
+    padding-right: 0;
+    padding-bottom: 12px;
+    border: none !important;
+  }
+
+  .teachers__filters__label {
+    min-width: 96px;
+  }
+
+  .teachers__filters__control {
+    width: 100%;
+  }
+
+  .teachers__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* CARD */
+  .teacher-card__avatar {
+    width: 120px;
+    height: 120px;
+  }
+  .teacher-card__name {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .teacher-card__specialty {
+    font-size: 0.85rem;
+  }
+
+  /* STATISTICS */
+  .statistics {
+    padding: 0 1rem;
+  }
+  .statistics__title {
+    margin-bottom: 24px;
+    font-size: 1.6rem;
+  }
+  .statistics .statistics-table {
+    font-size: 0.92rem;
+  }
+  .statistics .statistics-table__head th {
+    padding: 10px;
+    font-size: 1rem;
+  }
+  .statistics .statistics-table__body td {
+    padding: 8px 10px;
+  }
+  .pagination {
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  /* FAVORITES */
+  .favorites {
+    padding: 0 1rem;
+  }
+  .favorites__title {
+    margin-bottom: 24px;
+  }
+  .favorites__arrow {
+    font-size: 48px;
+    margin: auto 6px;
+  }
+  .favorites__list {
+    width: auto;
+    margin-left: 0;
+    margin-right: 0;
+    gap: 16px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  /* INFORMATION */
+  .information {
+    padding: 0 1rem;
+    margin-bottom: 32px;
+  }
+  .information__text {
+    line-height: 1.35;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+
+  /* FOOTER */
+  .footer {
+    padding: 0 1rem;
+  }
+  .footer .navigation {
+    gap: 12px;
+  }
+  .footer .navigation__list {
+    justify-content: center;
+    gap: 14px 20px;
+  }
+  .footer .navigation__add-btn {
+    max-width: 240px;
+    margin: 8px auto 0;
+  }
+}
+
+@media (max-width: $bp-mobile) {
+  .teachers__grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .teacher-card__avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .favorites__arrow {
+    font-size: 40px;
+  }
+}

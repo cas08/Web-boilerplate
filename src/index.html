@@ -1,21 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head itemscope itemtype="http://schema.org/WebSite">
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-   <head itemscope itemtype="http://schema.org/WebSite">
+    <title>Teachinder</title>
 
-      <meta charset="utf-8">
-      <meta http-equiv="x-ua-compatible" content="ie=edge">
-      <meta name="msapplication-tap-highlight" content="no">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/main.min.css" />
+  </head>
 
-      <title>Project</title>
+  <body itemscope itemtype="http://schema.org/WebPage" class="container">
+    <!-- HEADER + NAV -->
 
-      <link rel="stylesheet" href="./css/app.css">
+    <header class="header">
+      <div class="header__container">
+        <h1 class="header__logo">Teachinder</h1>
+        <div class="header__search-bar">
+          <input
+            class="header__input-search input"
+            type="text"
+            placeholder="Name, note or age to search"
+          />
+          <button class="header__button-search btn">Search</button>
+        </div>
+      </div>
 
-   </head>
+      <nav class="header__navigation navigation">
+        <ul class="navigation__list">
+          <li><a class="link bold" href="#teachers">Teachers</a></li>
+          <li><a class="link bold" href="#statistics">Statistics</a></li>
+          <li><a class="link bold" href="#favorites">Favorites</a></li>
+          <li><a class="link bold" href="#information">About</a></li>
+        </ul>
+        <button class="navigation__add-btn btn">Add teacher</button>
+      </nav>
+    </header>
 
-   <body itemscope itemtype="http://schema.org/WebPage">
-      <script type="text/javascript" src="./js/app.js"></script>
-      
+    <hr class="sep-500" />
+
+    <!-- Top Teachers -->
+    <section id="teachers" class="teachers">
+      <h2 class="teachers__title h-title">Top Teachers</h2>
+      <div class="teachers__filters">
+        <div class="teachers__filters__item">
+          <label for="filter-age" class="teachers__filters__label">Age</label>
+          <select id="filter-age" name="age" class="teachers__filters__control">
+            <option value="">Any</option>
+            <option value="18-30">18–30</option>
+            <option value="31-45">31–45</option>
+            <option value="46-60">46–60</option>
+            <option value="61+">61+</option>
+          </select>
+        </div>
+
+        <div class="teachers__filters__item">
+          <label for="filter-region" class="teachers__filters__label"
+            >Region</label
+          >
+          <select
+            id="filter-region"
+            name="region"
+            class="teachers__filters__control"
+          >
+            <option value="">Any</option>
+            <option value="europe">Europe</option>
+            <option value="asia">Asia</option>
+          </select>
+        </div>
+
+        <div class="teachers__filters__item">
+          <label for="filter-sex" class="teachers__filters__label">Sex</label>
+          <select id="filter-sex" name="sex" class="teachers__filters__control">
+            <option value="">Any</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+
+        <div class="teachers__filters__item teachers__filters__item--checkbox">
+          <input
+            type="checkbox"
+            id="filter-photo"
+            name="photo"
+            class="teachers__filters__checkbox"
+          />
+          <label
+            for="filter-photo"
+            class="teachers__filters__label teachers__filters__label--checkbox"
+          >
+            Only with photo
+          </label>
+        </div>
+
+        <div class="teachers__filters__item teachers__filters__item--checkbox">
+          <input
+            type="checkbox"
+            id="filter-favorites"
+            name="favorites"
+            class="teachers__filters__checkbox"
+          />
+          <label
+            for="filter-favorites"
+            class="teachers__filters__label teachers__filters__label--checkbox"
+          >
+            Only favorites
+          </label>
+        </div>
+      </div>
+      <div class="teachers__grid">
+        <!-- Картки викладачів  -->
+      </div>
+
+      <!-- Повідомлення коли немає результатів -->
+      <div
+        class="teachers__no-results"
+        id="no-results-message"
+        style="display: none"
+      >
+        <p>Nobody found</p>
+        <p>Try adjusting your filters</p>
+      </div>
+    </section>
+
+    <hr class="sep-500" />
+
+    <!-- Statistics -->
+    <section id="statistics" class="statistics">
+      <h2 class="statistics__title h-title">Statistics</h2>
+
+      <div class="statistics__table">
+        <div class="statistics-table__scroll">
+          <table class="statistics-table">
+            <thead class="statistics-table__head">
+              <tr>
+                <th scope="col" class="sortable" data-sort="full_name">
+                  <span class="statistics-table__th-text">
+                    Name
+                    <span class="sort-indicator">↕</span>
+                  </span>
+                </th>
+                <th scope="col" class="sortable" data-sort="course">
+                  <span class="statistics-table__th-text">
+                    Speciality
+                    <span class="sort-indicator">↕</span>
+                  </span>
+                </th>
+                <th scope="col" class="sortable" data-sort="age">
+                  <span class="statistics-table__th-text">
+                    Age
+                    <span class="sort-indicator">↕</span>
+                  </span>
+                </th>
+                <th scope="col" class="sortable" data-sort="gender">
+                  <span class="statistics-table__th-text">
+                    Gender
+                    <span class="sort-indicator">↕</span>
+                  </span>
+                </th>
+                <th scope="col" class="sortable" data-sort="country">
+                  <span class="statistics-table__th-text">
+                    Nationality
+                    <span class="sort-indicator">↕</span>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="statistics-table__body" id="statistics-table-body">
+              <!-- Дані -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <ul class="pagination__list">
+            <li class="pagination__item is-current">
+              <a class="pagination__link" href="#">1</a>
+            </li>
+            <li class="pagination__item">
+              <a class="pagination__link" href="#">2</a>
+            </li>
+            <li class="pagination__item">
+              <a class="pagination__link" href="#">3</a>
+            </li>
+            <li class="pagination__item pagination__ellipsis">…</li>
+            <li class="pagination__item">
+              <a class="pagination__link" href="#">Last</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <hr class="sep-500" />
+
+    <!-- Favorites -->
+    <section id="favorites" class="favorites">
+      <h2 class="favorites__title h-title">Favorites</h2>
+
+      <div class="favorites__row">
+        <button class="favorites__arrow favorites__arrow--prev" type="button">
+          ‹
+        </button>
+
+        <ul class="favorites__list">
+          <!-- Список улюблених викладачів -->
+        </ul>
+
+        <button class="favorites__arrow favorites__arrow--next" type="button">
+          ›
+        </button>
+      </div>
+    </section>
+
+    <hr class="sep-500" />
+    <!-- Information -->
+    <section id="information" class="information">
+      <div class="information__text">
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ut eligendi,
+          debitis natus obcaecati nam alias, ullam ipsa aspernatur fugit commodi
+          optio qui? Magni obcaecati maxime molestiae deserunt perferendis illum
+          nihil. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Delectus maiores cum ab velit praesentium expedita sit, veniam,
+          exercitationem officiis corrupti laboriosam amet animi eaque
+          repudiandae, cupiditate tempora voluptates eum vel?
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sunt
+          excepturi dolores eveniet, necessitatibus esse laborios
+        </p>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates
+          sit esse mollitia sapiente assumenda!
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+
+    <footer id="footer" class="footer">
+      <div class="footer__inner">
+        <nav class="footer__navigation navigation">
+          <ul class="navigation__list">
+            <li><a class="link" href="#teachers">Teachers</a></li>
+            <li><a class="link" href="#statistics">Statistics</a></li>
+            <li><a class="link" href="#favorites">Favorites</a></li>
+            <li><a class="link" href="#about">About</a></li>
+          </ul>
+          <button class="navigation__add-btn btn">Add teacher</button>
+        </nav>
+      </div>
+    </footer>
+
+    <!-- Modal Add Teacher -->
+    <div class="add-modal" id="add-teacher-modal">
+      <div class="add-modal__backdrop" data-modal-close></div>
+
+      <div class="add-modal__dialog">
+        <header class="add-modal__header">
+          <h3 class="add-modal__title" id="add-teacher-title">Add Teacher</h3>
+          <button
+            type="button"
+            class="add-modal__close"
+            title="Close"
+            data-modal-close
+          >
+            &times;
+          </button>
+        </header>
+
+        <form class="add-modal__body" id="add-teacher-form" novalidate>
+          <div class="add-modal__grid">
+            <!-- Name  -->
+            <div class="form-group is-span-2">
+              <label class="form-label" for="t-name">Name</label>
+              <input
+                id="t-name"
+                name="name"
+                type="text"
+                class="input"
+                placeholder="Enter name"
+                required
+              />
+            </div>
+
+            <!-- Specialty -->
+            <div class="form-group is-span-2">
+              <label class="form-label" for="t-specialty">Speciality</label>
+              <select id="t-specialty" name="specialty" class="input" required>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="English">English</option>
+                <option value="Art">Art</option>
+                <option value="Chess">Chess</option>
+              </select>
+            </div>
+
+            <!--  -->
+            <div class="form-group">
+              <label class="form-label" for="t-country">Country</label>
+              <select id="t-country" name="country" class="input">
+                <option>Ukraine</option>
+                <option>USA</option>
+                <option>UK</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t-city">City</label>
+              <input id="t-city" name="city" type="text" class="input" />
+            </div>
+
+            <!-- Email / Phone -->
+            <div class="form-group">
+              <label class="form-label" for="t-email">Email</label>
+              <input id="t-email" name="email" type="email" class="input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t-phone">Phone</label>
+              <input id="t-phone" name="phone" type="tel" class="input" />
+            </div>
+
+            <!-- Date of birth  -->
+            <div class="form-group">
+              <label class="form-label" for="t-dob">Date of birth</label>
+              <input id="t-dob" name="dob" type="date" class="input" />
+            </div>
+
+            <!-- Sex radios -->
+            <fieldset class="form-group form-group--inline is-span-2">
+              <legend class="form-label">Sex</legend>
+              <label class="radio">
+                Male <input type="radio" name="sex" value="male" />
+              </label>
+              <label class="radio">
+                Female <input type="radio" name="sex" value="female" />
+              </label>
+            </fieldset>
+
+            <!-- Background color  -->
+            <div class="form-group is-span-2 form-group--inline">
+              <label class="form-label" for="t-bgcolor">Background color</label>
+              <input
+                id="t-bgcolor"
+                name="bgcolor"
+                type="color"
+                class="color-input"
+                value="#000000"
+              />
+            </div>
+
+            <!-- Notes  -->
+            <div class="form-group is-span-2">
+              <label class="form-label" for="t-notes">Notes (optional)</label>
+              <textarea
+                id="t-notes"
+                name="notes"
+                class="input"
+                rows="5"
+                placeholder=""
+              ></textarea>
+            </div>
+          </div>
+
+          <footer class="add-modal__footer">
+            <button type="submit" class="btn btn--primary btn--block">
+              Add
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Teacher Info -->
+    <div class="info-modal" id="teacher-info-modal">
+      <div class="info-modal__backdrop"></div>
+
+      <div class="info-modal__dialog">
+        <header class="info-modal__header">
+          <h3 class="info-modal__title" id="teacher-info-title">
+            Teacher Info
+          </h3>
+          <button type="button" class="info-modal__close" title="Close">
+            &times;
+          </button>
+        </header>
+
+        <div class="info-modal__body">
+          <button
+            class="favorite-btn"
+            type="button"
+            title="Add to favorites"
+          ></button>
+
+          <div class="teacher-info">
+            <div class="teacher-info__avatar">
+              <!-- Фото -->
+            </div>
+
+            <div class="teacher-info__content">
+              <h4 class="teacher-info__name">
+                <!-- Ім'я  -->
+              </h4>
+              <p class="teacher-info__specialty">
+                <!-- Спеціальність -->
+              </p>
+
+              <ul class="teacher-info__meta">
+                <!-- Додаткова інформація -->
+              </ul>
+            </div>
+          </div>
+
+          <p class="teacher-info__bio">
+            <!-- Біографія -->
+          </p>
+
+          <a href="#" class="teacher-info__map-link">toggle map</a>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>
