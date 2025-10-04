@@ -9,7 +9,7 @@ function validateCapitalizedString(value) {
   return typeof value === "string" && !!value && startsWithCapital(value);
 }
 
-function isValidEmail(email) {
+export function isValidEmail(email) {
   return /^.+@.+\..+$/.test(email);
 }
 

@@ -48,9 +48,10 @@
           <label for="filter-age" class="teachers__filters__label">Age</label>
           <select id="filter-age" name="age" class="teachers__filters__control">
             <option value="">Any</option>
-            <option value="18-31">18–31</option>
-            <option value="32-40">32–40</option>
-            <option value="40+">40+</option>
+            <option value="18-30">18–30</option>
+            <option value="31-45">31–45</option>
+            <option value="46-60">46–60</option>
+            <option value="61+">61+</option>
           </select>
         </div>
 
@@ -109,119 +110,17 @@
         </div>
       </div>
       <div class="teachers__grid">
-        <div class="teacher-card">
-          <div class="teacher-card__avatar">
-            <img
-              src="images/teacher.jpg"
-              alt="Ihor Tkachuk"
-              class="teacher-card__image"
-            />
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Ihor</span>
-            <span class="teacher-card__last-name">Tkachuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chemistry</p>
-          <p class="teacher-card__country">Ukraine</p>
-        </div>
-        <div class="teacher-card teacher-card--favorite">
-          <div class="teacher-card__avatar">
-            <img
-              src="images/teacher.jpg"
-              alt="Ihor Tkachuk"
-              class="teacher-card__image"
-            />
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Ihor</span>
-            <span class="teacher-card__last-name">Tkachuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chemistry</p>
-          <p class="teacher-card__country">Ukraine</p>
-        </div>
-        <div class="teacher-card">
-          <div class="teacher-card__avatar">
-            <img
-              src="images/teacher.jpg"
-              alt="Ihor Tkachuk"
-              class="teacher-card__image"
-            />
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Ihor</span>
-            <span class="teacher-card__last-name">Tkachuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chemistry</p>
-          <p class="teacher-card__country">Ukraine</p>
-        </div>
-        <div class="teacher-card">
-          <div class="teacher-card__avatar">
-            <img
-              src="images/teacher.jpg"
-              alt="Ihor Tkachuk"
-              class="teacher-card__image"
-            />
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Ihor</span>
-            <span class="teacher-card__last-name">Tkachuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chemistry</p>
-          <p class="teacher-card__country">Ukraine</p>
-        </div>
-        <div class="teacher-card teacher-card--favorite">
-          <div class="teacher-card__avatar">
-            <img
-              src="images/teacher.jpg"
-              alt="Ihor Tkachuk"
-              class="teacher-card__image"
-            />
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Ihor</span>
-            <span class="teacher-card__last-name">Tkachuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chemistry</p>
-          <p class="teacher-card__country">Ukraine</p>
-        </div>
-        <div class="teacher-card">
-          <div class="teacher-card__avatar">
-            <img
-              src="images/teacher.jpg"
-              alt="Ihor Tkachuk"
-              class="teacher-card__image"
-            />
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Ihor</span>
-            <span class="teacher-card__last-name">Tkachuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chemistry</p>
-          <p class="teacher-card__country">Ukraine</p>
-        </div>
+        <!-- Картки викладачів  -->
+      </div>
 
-        <div class="teacher-card">
-          <div class="teacher-card__avatar">
-            <div class="teacher-card__initials">A.M</div>
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Anna</span>
-            <span class="teacher-card__last-name">Muzchuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chess</p>
-          <p class="teacher-card__country">Belarus</p>
-        </div>
-        <div class="teacher-card">
-          <div class="teacher-card__avatar">
-            <div class="teacher-card__initials">A.M</div>
-          </div>
-          <h3 class="teacher-card__name">
-            <span class="teacher-card__first-name">Anna</span>
-            <span class="teacher-card__last-name">Muzchuk</span>
-          </h3>
-          <p class="teacher-card__specialty">Chess</p>
-          <p class="teacher-card__country">Belarus</p>
-        </div>
+      <!-- Повідомлення коли немає результатів -->
+      <div
+        class="teachers__no-results"
+        id="no-results-message"
+        style="display: none"
+      >
+        <p>Nobody found</p>
+        <p>Try adjusting your filters</p>
       </div>
     </section>
 
@@ -236,94 +135,40 @@
           <table class="statistics-table">
             <thead class="statistics-table__head">
               <tr>
-                <th scope="col">
-                  <span class="statistics-table__th-text">Name</span>
+                <th scope="col" class="sortable" data-sort="full_name">
+                  <span class="statistics-table__th-text">
+                    Name
+                    <span class="sort-indicator">↕</span>
+                  </span>
                 </th>
-                <th scope="col">
-                  <span class="statistics-table__th-text">Speciality</span>
+                <th scope="col" class="sortable" data-sort="course">
+                  <span class="statistics-table__th-text">
+                    Speciality
+                    <span class="sort-indicator">↕</span>
+                  </span>
                 </th>
-                <th scope="col">
-                  <span class="statistics-table__th-text">Age</span>
+                <th scope="col" class="sortable" data-sort="age">
+                  <span class="statistics-table__th-text">
+                    Age
+                    <span class="sort-indicator">↕</span>
+                  </span>
                 </th>
-                <th scope="col">
-                  <span class="statistics-table__th-text">Gender</span>
+                <th scope="col" class="sortable" data-sort="gender">
+                  <span class="statistics-table__th-text">
+                    Gender
+                    <span class="sort-indicator">↕</span>
+                  </span>
                 </th>
-                <th scope="col">
-                  <span class="statistics-table__th-text">Nationality</span>
+                <th scope="col" class="sortable" data-sort="country">
+                  <span class="statistics-table__th-text">
+                    Nationality
+                    <span class="sort-indicator">↕</span>
+                  </span>
                 </th>
               </tr>
             </thead>
-            <tbody class="statistics-table__body">
-              <tr>
-                <td>Daisy Alexander</td>
-                <td>Chemistry</td>
-                <td>28</td>
-                <td>Female</td>
-                <td>Vietnam</td>
-              </tr>
-              <tr>
-                <td>Julia Bradley</td>
-                <td>Math</td>
-                <td>26</td>
-                <td>Female</td>
-                <td>USA</td>
-              </tr>
-              <tr>
-                <td>Rita Hart</td>
-                <td>Art</td>
-                <td>41</td>
-                <td>Female</td>
-                <td>Ireland</td>
-              </tr>
-              <tr>
-                <td>Jonathan Jacobs</td>
-                <td>Math</td>
-                <td>32</td>
-                <td>Male</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>Nathaniel White</td>
-                <td>Computer Science</td>
-                <td>37</td>
-                <td>Male</td>
-                <td>Austria</td>
-              </tr>
-              <tr>
-                <td>Frank Medina</td>
-                <td>English</td>
-                <td>43</td>
-                <td>Male</td>
-                <td>Italy</td>
-              </tr>
-              <tr>
-                <td>Ella Curtis</td>
-                <td>Chess</td>
-                <td>34</td>
-                <td>Female</td>
-                <td>USA</td>
-              </tr>
-              <tr>
-                <td>Claire Simmons</td>
-                <td>Art</td>
-                <td>38</td>
-                <td>Female</td>
-                <td>Netherlands</td>
-              </tr>
-              <tr>
-                <td>Benjamin Knight</td>
-                <td>Biology</td>
-                <td>44</td>
-                <td>Male</td>
-                <td>Scotland</td>
-              </tr>
-              <tr>
-                <td>Norma Rose</td>
-                <td>Statistics</td>
-                <td>36</td>
-                <td>Female</td>
-                <td>France</td>
-              </tr>
+            <tbody class="statistics-table__body" id="statistics-table-body">
+              <!-- Дані -->
             </tbody>
           </table>
         </div>
@@ -360,86 +205,7 @@
         </button>
 
         <ul class="favorites__list">
-          <li class="favorites__item">
-            <div class="teacher-card">
-              <div class="teacher-card__avatar">
-                <img
-                  src="images/teacher.jpg"
-                  alt="Ihor Tkachuk"
-                  class="teacher-card__image"
-                />
-              </div>
-              <h3 class="teacher-card__name">
-                <span class="teacher-card__first-name">Ihor</span>
-                <span class="teacher-card__last-name">Tkachuk</span>
-              </h3>
-              <p class="teacher-card__country">Ukraine</p>
-            </div>
-          </li>
-
-          <li class="favorites__item">
-            <div class="teacher-card">
-              <div class="teacher-card__avatar">
-                <div class="teacher-card__initials">A.M</div>
-              </div>
-              <h3 class="teacher-card__name">
-                <span class="teacher-card__first-name">Anna</span>
-                <span class="teacher-card__last-name">Muzchuk</span>
-              </h3>
-              <p class="teacher-card__country">Belarus</p>
-            </div>
-          </li>
-
-          <li class="favorites__item">
-            <div class="teacher-card">
-              <div class="teacher-card__avatar">
-                <img
-                  src="images/teacher.jpg"
-                  alt="Ihor Tkachuk"
-                  class="teacher-card__image"
-                />
-              </div>
-              <h3 class="teacher-card__name">
-                <span class="teacher-card__first-name">Ihor</span>
-                <span class="teacher-card__last-name">Tkachuk</span>
-              </h3>
-              <p class="teacher-card__country">Ukraine</p>
-            </div>
-          </li>
-
-          <li class="favorites__item">
-            <div class="teacher-card">
-              <div class="teacher-card__avatar">
-                <img
-                  src="images/teacher.jpg"
-                  alt="Ihor Tkachuk"
-                  class="teacher-card__image"
-                />
-              </div>
-              <h3 class="teacher-card__name">
-                <span class="teacher-card__first-name">Ihor</span>
-                <span class="teacher-card__last-name">Tkachuk</span>
-              </h3>
-              <p class="teacher-card__country">Ukraine</p>
-            </div>
-          </li>
-
-          <li class="favorites__item">
-            <div class="teacher-card">
-              <div class="teacher-card__avatar">
-                <img
-                  src="images/teacher.jpg"
-                  alt="Ihor Tkachuk"
-                  class="teacher-card__image"
-                />
-              </div>
-              <h3 class="teacher-card__name">
-                <span class="teacher-card__first-name">Ihor</span>
-                <span class="teacher-card__last-name">Tkachuk</span>
-              </h3>
-              <p class="teacher-card__country">Ukraine</p>
-            </div>
-          </li>
+          <!-- Список улюблених викладачів -->
         </ul>
 
         <button class="favorites__arrow favorites__arrow--next" type="button">
@@ -583,6 +349,7 @@
                 name="bgcolor"
                 type="color"
                 class="color-input"
+                value="#000000"
               />
             </div>
 
@@ -631,37 +398,25 @@
 
           <div class="teacher-info">
             <div class="teacher-info__avatar">
-              <img
-                src="images/teacher.jpg"
-                alt="Ihor Tkachuk"
-                class="teacher-info__image"
-              />
+              <!-- Фото -->
             </div>
 
             <div class="teacher-info__content">
-              <h4 class="teacher-info__name">Ihor Tkachuk</h4>
-              <p class="teacher-info__specialty"><strong>Chemistry</strong></p>
+              <h4 class="teacher-info__name">
+                <!-- Ім'я  -->
+              </h4>
+              <p class="teacher-info__specialty">
+                <!-- Спеціальність -->
+              </p>
 
               <ul class="teacher-info__meta">
-                <li>Kyiv, Ukraine</li>
-                <li>35, Male</li>
-                <li>
-                  <a href="mailto:ihor_tkachuk@domain.com"
-                    >ihor_tkachuk@domain.com</a
-                  >
-                </li>
-                <li>+380964949532</li>
+                <!-- Додаткова інформація -->
               </ul>
             </div>
           </div>
 
           <p class="teacher-info__bio">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab autem
-            consectetur culpa cumque, distinctio dolor dolore dolorem doloremque
-            ea explicabo facilis nam necessitatibus nisi pariatur perspiciatis
-            porro quis similique temporibus velitam veritatis? Ab ad, aliquam
-            amet consectetur cupiditate debitis deserunt doloribus dolorum earum
-            eius eos minus nostrum odio omnis perferendis...
+            <!-- Біографія -->
           </p>
 
           <a href="#" class="teacher-info__map-link">toggle map</a>
@@ -669,6 +424,6 @@
       </div>
     </div>
 
-    <script type="text/javascript" src="./js/app.js"></script>
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>

@@ -75,4 +75,23 @@
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 2rem;
   }
+
+  &__no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: $secondary-color;
+
+    p {
+      margin: 0;
+      font-size: 1.2rem;
+      line-height: 1.5;
+
+      &:first-child {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: black;
+        margin-bottom: 10px;
+      }
+    }
+  }
 }

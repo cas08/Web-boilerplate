@@ -42,7 +42,7 @@
     overflow: hidden;
 
     list-style: none;
-    padding: 0;
+    padding: 0 10px;
 
     width: 1000px;
     max-width: 100%;
@@ -53,13 +53,41 @@
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 20px;
-    justify-content: space-between;
+    justify-content: flex-start;
     text-align: center;
 
     @media (max-width: 1100px) {
       overflow-x: auto;
       justify-content: flex-start;
       gap: 16px;
+    }
+  }
+
+  &__item {
+    flex: 0 0 auto;
+    width: calc((100% - 80px) / 5); // 5 ел gap 20px
+    max-width: 100%;
+
+    .teacher-card {
+      &.teacher-card--favorite::after {
+        right: -5px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      width: calc((100% - 60px) / 4); // 4 ел gap 20px
+    }
+
+    @media (max-width: 768px) {
+      width: calc((100% - 40px) / 3);
+    }
+
+    @media (max-width: 600px) {
+      width: calc((100% - 40px) / 2);
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
     }
   }
 }

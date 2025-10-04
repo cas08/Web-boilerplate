@@ -1,6 +1,6 @@
 import { courseList } from "./variables.js";
 
-function getRandomColor() {
+export function getRandomColor() {
   let hexCode = "#";
 
   while (hexCode.length < 7) {

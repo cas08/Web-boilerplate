@@ -7,48 +7,275 @@ import {
   findUser,
   findUsers,
   calculatePercentage,
+  getUniqueCountries,
+  getUniqueCourses,
 } from "./users-functions/index.js";
 
-export function processUsers(randomUserMock, additionalUsers) {
-  const mergedUsers = mergeAndFormatUsers(randomUserMock, additionalUsers);
-  const validationResults = validateUsers(mergedUsers);
+import {
+  // Пошук
+  searchTeachers,
+  clearSearch,
+  initializeSearch,
 
-  // console.log("Validation Results:", validationResults);
+  // Фільтрування
+  initializeFilters,
+  applyFilters as applyFiltersModule,
 
-  // Task 3
-  // const filteredUsers = filterUsers(mergedUsers, {
-  //   country: "France",
-  //   age: 73,
-  //   favorite: false,
-  // });
-  // console.log("Filtered Users:", filteredUsers);
+  // Сортування
+  initializeSorting,
+  sortStatisticsTable as sortStatisticsTableModule,
+  updateStatisticsTable,
+  updateSortIndicators,
 
-  // // Task 4
-  // const sortedByName = sortUsers(mergedUsers, "full_name", "asc");
+  // Заповнення даних
+  displayTeachers,
+  createTeacherCard,
+  getInitials,
+  populateStatisticsTable,
+  updateTeacherCardDisplay,
 
-  // const sortedByAge = sortUsers(mergedUsers, "age", "desc");
-  // const sortedByBirthday = sortUsers(mergedUsers, "b_day", "asc");
-  // const sortedByCountry = sortUsers(mergedUsers, "country", "desc");
+  // Улюблені викладачі
+  toggleFavorite,
+  updateFavoritesDisplay,
+  saveFavorites,
+  loadFavorites,
+  clearFavorites,
+  updateTeacherInfoModal,
+  openTeacherInfoModal,
+  nextCarouselPage,
+  prevCarouselPage,
+  handleResize,
 
-  // console.log(sortedByName);
+  // Додавання викладача
+  validateAddTeacherForm,
+  createNewTeacher,
+  addTeacherToList,
+  clearAddTeacherForm,
+  showFormErrors,
+  showSuccessMessage,
+  initializeAddTeacherForm,
+} from "./site_functions/index.js";
 
-  // Task 5
-  // const foundUser = findUser(mergedUsers, "full_name", "Claude Payne");
-  // console.log(foundUser);
+// Глобальні змінні
+let teachers = [];
+let favorites = [];
+let currentFilters = {};
+let currentSort = { field: null, direction: "asc" };
+let currentSearchQuery = "";
 
-  // const foundUsers = findUsers(mergedUsers, "country", "Germany");
-  // console.log(foundUsers);
+// DOM
+const teachersGrid = document.querySelector(".teachers__grid");
+const favoritesList = document.querySelector(".favorites__list");
+const teacherInfoModal = document.getElementById("teacher-info-modal");
+const addTeacherModal = document.getElementById("add-teacher-modal");
+const addTeacherForm = document.getElementById("add-teacher-form");
+const noResultsMessage = document.getElementById("no-results-message");
+const statisticsTableBody = document.getElementById("statistics-table-body");
 
-  // Task 6:
-  const percentageOver = calculatePercentage(mergedUsers, {
-    age: { operator: ">", value: 30 },
-  });
-  console.log(`Percentage of users over 30: ${percentageOver}%`);
-
-  const percentageFrom = calculatePercentage(mergedUsers, {
-    country: { operator: "=", value: "Germany" },
-  });
-  console.log(`Percentage of users from Germany: ${percentageFrom}%`);
+function updateTeacherInfoModalWrapper(teacher) {
+  return updateTeacherInfoModal(teacher, getInitials, (teacher) =>
+    toggleFavorite(
+      teacher,
+      teachers,
+      updateTeacherCardDisplay,
+      () =>
+        updateFavoritesDisplay(teachers, (teacher) =>
+          createTeacherCard(teacher, getInitials, (teacher) =>
+            openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+          )
+        ),
+      () => saveFavorites(teachers),
+      updateTeacherInfoModalWrapper
+    )
+  );
 }
 
-processUsers(randomUserMock, additionalUsers);
+function initApp() {
+  teachers = mergeAndFormatUsers(randomUserMock, additionalUsers);
+
+  loadFavorites(teachers, () =>
+    updateFavoritesDisplay(teachers, (teacher) =>
+      createTeacherCard(teacher, getInitials, (teacher) =>
+        openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+      )
+    )
+  );
+
+  displayTeachers(teachers, (teacher) =>
+    createTeacherCard(teacher, getInitials, (teacher) =>
+      openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+    )
+  );
+
+  initializeFilters(teachers, applyFilters);
+
+  initializeStatistics();
+
+  initializeSearch(applyFilters);
+
+  addEventListeners();
+}
+
+function applyFilters() {
+  const searchInput = document.querySelector(".header__input-search");
+  const searchQuery = searchInput ? searchInput.value : "";
+  currentSearchQuery = searchQuery;
+
+  const result = applyFiltersModule(teachers, searchQuery, searchTeachers);
+
+  currentFilters = result.filters;
+
+  displayTeachers(result.filteredTeachers, (teacher) =>
+    createTeacherCard(teacher, getInitials, (teacher) =>
+      openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+    )
+  );
+}
+
+function initializeStatistics() {
+  populateStatisticsTable(teachers);
+
+  initializeSorting(sortStatisticsTable);
+}
+
+function sortStatisticsTable(field) {
+  currentSort = sortStatisticsTableModule(
+    teachers,
+    field,
+    currentSort,
+    updateStatisticsTable,
+    updateSortIndicators
+  );
+}
+
+function handleAddTeacherForm(event) {
+  event.preventDefault();
+
+  const formData = new FormData(addTeacherForm);
+  const validation = validateAddTeacherForm(formData, teachers);
+
+  const formFooter = addTeacherForm.querySelector(".add-modal__footer");
+
+  if (!validation.isValid) {
+    showFormErrors(validation.errors, formFooter);
+    return;
+  }
+
+  const newTeacher = createNewTeacher(validation.data);
+
+  teachers = addTeacherToList(newTeacher, teachers);
+
+  clearAddTeacherForm(addTeacherForm);
+
+  showSuccessMessage("Teacher added successfully!", formFooter);
+
+  displayTeachers(teachers, (teacher) =>
+    createTeacherCard(teacher, getInitials, (teacher) =>
+      openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+    )
+  );
+
+  populateStatisticsTable(teachers);
+
+  initializeFilters(teachers, applyFilters);
+
+  setTimeout(() => {
+    closeModals();
+    const successMessage = formFooter.querySelector(".form-success");
+    if (successMessage) {
+      successMessage.remove();
+    }
+  }, 500);
+}
+
+function addEventListeners() {
+  const closeButtons = document.querySelectorAll(
+    "[data-modal-close], .info-modal__close"
+  );
+  closeButtons.forEach((btn) => {
+    btn.addEventListener("click", closeModals);
+  });
+
+  const backdrops = document.querySelectorAll(
+    ".info-modal__backdrop, .add-modal__backdrop"
+  );
+  backdrops.forEach((backdrop) => {
+    backdrop.addEventListener("click", closeModals);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeModals();
+    }
+  });
+
+  const addTeacherBtns = document.querySelectorAll(".navigation__add-btn");
+  addTeacherBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (addTeacherModal) {
+        addTeacherModal.style.display = "block";
+        document.body.style.overflow = "hidden";
+        if (addTeacherForm) {
+          clearAddTeacherForm(addTeacherForm);
+          initializeAddTeacherForm(addTeacherForm);
+          const formFooter = addTeacherForm.querySelector(".add-modal__footer");
+          const existingMessages = formFooter.querySelectorAll(
+            ".form-error, .form-success"
+          );
+          existingMessages.forEach((msg) => msg.remove());
+        }
+      }
+    });
+  });
+
+  if (addTeacherForm) {
+    addTeacherForm.addEventListener("submit", handleAddTeacherForm);
+  }
+
+  const prevArrow = document.querySelector(".favorites__arrow--prev");
+  const nextArrow = document.querySelector(".favorites__arrow--next");
+
+  if (prevArrow) {
+    prevArrow.addEventListener("click", () => {
+      prevCarouselPage(teachers, (teacher) =>
+        createTeacherCard(teacher, getInitials, (teacher) =>
+          openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+        )
+      );
+    });
+  }
+
+  if (nextArrow) {
+    nextArrow.addEventListener("click", () => {
+      nextCarouselPage(teachers, (teacher) =>
+        createTeacherCard(teacher, getInitials, (teacher) =>
+          openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+        )
+      );
+    });
+  }
+
+  let resizeTimeout;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      handleResize(teachers, (teacher) =>
+        createTeacherCard(teacher, getInitials, (teacher) =>
+          openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+        )
+      );
+    }, 250);
+  });
+}
+
+function closeModals() {
+  if (teacherInfoModal) {
+    teacherInfoModal.style.display = "none";
+  }
+  if (addTeacherModal) {
+    addTeacherModal.style.display = "none";
+  }
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("DOMContentLoaded", initApp);
