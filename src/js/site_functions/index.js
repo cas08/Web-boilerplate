@@ -1,4 +1,4 @@
-export { searchTeachers, clearSearch, initializeSearch } from "./search.js";
+export { searchTeachers, initializeSearch } from "./search.js";
 
 export { initializeFilters, applyFilters } from "./filtering.js";
 
@@ -22,7 +22,6 @@ export {
   updateFavoritesDisplay,
   saveFavorites,
   loadFavorites,
-  clearFavorites,
   updateTeacherInfoModal,
   openTeacherInfoModal,
   nextCarouselPage,

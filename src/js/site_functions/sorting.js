@@ -54,25 +54,13 @@ export function sortStatisticsTable(
   return newSort;
 }
 
+import { populateStatisticsTable } from "./data-population.js";
+
 export function updateStatisticsTable(sortedTeachers) {
-  const statisticsTableBody = document.getElementById("statistics-table-body");
-  if (!statisticsTableBody) return;
+  window.currentTeachersData = sortedTeachers;
 
-  statisticsTableBody.innerHTML = "";
-
-  sortedTeachers.forEach((teacher) => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${teacher.full_name}</td>
-      <td>${teacher.course || "N/A"}</td>
-      <td>${teacher.age || "N/A"}</td>
-      <td>${teacher.gender || "N/A"}</td>
-      <td>${teacher.country || "N/A"}</td>
-    `;
-
-    statisticsTableBody.appendChild(row);
-  });
+  // оновлення таблиці з пагінацією з першої сторінки
+  populateStatisticsTable(sortedTeachers, 1);
 }
 
 export function updateSortIndicators(field, direction) {

@@ -3,20 +3,13 @@ export function toggleFavorite(
   teachers,
   updateTeacherCardDisplay,
   updateFavoritesDisplay,
-  saveFavorites,
-  updateTeacherInfoModal
+  saveFavorites
 ) {
-  console.log(
-    `Toggling favorite for ${teacher.full_name}, current: ${teacher.favorite}`
-  );
   teacher.favorite = !teacher.favorite;
 
   const teacherIndex = teachers.findIndex((t) => t.id === teacher.id);
   if (teacherIndex !== -1) {
     teachers[teacherIndex].favorite = teacher.favorite;
-    console.log(
-      `Updated teacher in array, new favorite status: ${teachers[teacherIndex].favorite}`
-    );
   }
 
   updateTeacherCardDisplay(teacher);
@@ -35,10 +28,6 @@ export function toggleFavorite(
       ? "Remove from favorites"
       : "Add to favorites";
   }
-
-  console.log(
-    `Teacher ${teacher.full_name} favorite status changed to: ${teacher.favorite}`
-  );
 }
 
 let currentCarouselIndex = 0;
@@ -84,9 +73,6 @@ export function updateFavoritesDisplay(teachers, createTeacherCard) {
     listItem.className = "favorites__item";
 
     const card = createTeacherCard(teacher);
-    console.log(
-      `Created card for ${teacher.full_name} with class: ${card.className}`
-    );
     listItem.appendChild(card);
     fragment.appendChild(listItem);
   });
@@ -189,8 +175,6 @@ export function updateTeacherInfoModal(teacher, getInitials, toggleFavorite) {
     return;
   }
 
-  console.log("Updating teacher info modal for:", teacher.full_name);
-
   const title = document.getElementById("teacher-info-title");
   const favoriteBtn = teacherInfoModal.querySelector(".favorite-btn");
   const avatar = teacherInfoModal.querySelector(".teacher-info__avatar");
@@ -249,8 +233,6 @@ export function openTeacherInfoModal(teacher, updateTeacherInfoModal) {
     console.error("Teacher info modal not found");
     return;
   }
-
-  console.log("Opening teacher info modal for:", teacher.full_name);
 
   updateTeacherInfoModal(teacher);
 

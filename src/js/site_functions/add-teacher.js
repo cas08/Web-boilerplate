@@ -149,7 +149,15 @@ export function showFormErrors(errors, container) {
   errors.forEach((error) => {
     const errorElement = document.createElement("div");
     errorElement.className = "form-error";
-    errorElement.textContent = error;
+
+    if (typeof error === "string") {
+      errorElement.textContent = error;
+    } else if (error.field && error.message) {
+      errorElement.textContent = error.message;
+    } else {
+      errorElement.textContent = error.toString();
+    }
+
     errorElement.style.color = "#e74c3c";
     errorElement.style.fontSize = "0.9rem";
     errorElement.style.marginTop = "4px";
