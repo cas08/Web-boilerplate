@@ -47,6 +47,14 @@
         border-bottom-color: #000;
         border-bottom-width: 5px;
       }
+
+      &.sort-asc,
+      &.sort-desc {
+        background: $table-bg;
+        border-bottom-color: #000;
+        border-bottom-width: 5px;
+        font-weight: 600;
+      }
     }
 
     &__th-text {
@@ -58,10 +66,12 @@
     .sort-indicator {
       position: absolute;
       right: 0;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: #ccc;
-      transition: color 0.2s ease, transform 0.2s ease;
+      transition: color 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
       pointer-events: none;
+      font-weight: bold;
+      visibility: hidden;
     }
 
     .sortable {
@@ -70,16 +80,22 @@
 
       &:hover .sort-indicator {
         color: #1a9cb0;
+        visibility: visible;
       }
     }
 
     .sort-asc .sort-indicator {
       color: #1a9cb0;
       transform: rotate(180deg);
+      font-size: 1rem;
+      visibility: visible;
     }
 
     .sort-desc .sort-indicator {
       color: #1a9cb0;
+      transform: rotate(0deg);
+      font-size: 1rem;
+      visibility: visible;
     }
 
     &__body td {
@@ -96,6 +112,10 @@
   display: flex;
   justify-content: flex-start;
   margin-left: 16px;
+
+  &:empty {
+    display: none;
+  }
 
   &__list {
     list-style: none;

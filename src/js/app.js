@@ -1,20 +1,13 @@
-import { randomUserMock, additionalUsers } from "./FE4U-Lab2-mock.js";
 import {
-  mergeAndFormatUsers,
-  validateUsers,
-  filterUsers,
-  sortUsers,
-  findUser,
-  findUsers,
-  calculatePercentage,
-  getUniqueCountries,
-  getUniqueCourses,
-} from "./users-functions/index.js";
+  saveTeacher,
+  getTeachersFromServer,
+  loadInitialData,
+  loadMoreData,
+} from "./api-functions/index.js";
 
 import {
   // Пошук
   searchTeachers,
-  clearSearch,
   initializeSearch,
 
   // Фільтрування
@@ -39,7 +32,6 @@ import {
   updateFavoritesDisplay,
   saveFavorites,
   loadFavorites,
-  clearFavorites,
   updateTeacherInfoModal,
   openTeacherInfoModal,
   nextCarouselPage,
@@ -58,7 +50,6 @@ import {
 
 // Глобальні змінні
 let teachers = [];
-let favorites = [];
 let currentFilters = {};
 let currentSort = { field: null, direction: "asc" };
 let currentSearchQuery = "";
@@ -69,8 +60,6 @@ const favoritesList = document.querySelector(".favorites__list");
 const teacherInfoModal = document.getElementById("teacher-info-modal");
 const addTeacherModal = document.getElementById("add-teacher-modal");
 const addTeacherForm = document.getElementById("add-teacher-form");
-const noResultsMessage = document.getElementById("no-results-message");
-const statisticsTableBody = document.getElementById("statistics-table-body");
 
 function updateTeacherInfoModalWrapper(teacher) {
   return updateTeacherInfoModal(teacher, getInitials, (teacher) =>
@@ -90,30 +79,44 @@ function updateTeacherInfoModalWrapper(teacher) {
   );
 }
 
-function initApp() {
-  teachers = mergeAndFormatUsers(randomUserMock, additionalUsers);
+async function initApp() {
+  try {
+    showLoadingIndicator();
 
-  loadFavorites(teachers, () =>
-    updateFavoritesDisplay(teachers, (teacher) =>
+    // дані з обох джерел
+    const { apiUsers, serverTeachers } = await loadInitialData();
+    teachers = [...apiUsers, ...serverTeachers];
+
+    hideLoadingIndicator();
+
+    loadFavorites(teachers, () =>
+      updateFavoritesDisplay(teachers, (teacher) =>
+        createTeacherCard(teacher, getInitials, (teacher) =>
+          openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+        )
+      )
+    );
+
+    displayTeachers(teachers, (teacher) =>
       createTeacherCard(teacher, getInitials, (teacher) =>
         openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
       )
-    )
-  );
+    );
 
-  displayTeachers(teachers, (teacher) =>
-    createTeacherCard(teacher, getInitials, (teacher) =>
-      openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
-    )
-  );
+    initializeFilters(teachers, applyFilters);
 
-  initializeFilters(teachers, applyFilters);
+    initializeStatistics();
 
-  initializeStatistics();
+    initializeSearch(applyFilters);
 
-  initializeSearch(applyFilters);
+    toggleLoadMoreButton(teachers);
 
-  addEventListeners();
+    addEventListeners();
+  } catch (error) {
+    console.error("Error initializing app:", error);
+    hideLoadingIndicator();
+    showErrorMessage("Failed to load users. Please try again later.");
+  }
 }
 
 function applyFilters() {
@@ -130,17 +133,39 @@ function applyFilters() {
       openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
     )
   );
+
+  toggleLoadMoreButton(result.filteredTeachers);
+
+  updateStatisticsWithFilteredData(result.filteredTeachers);
 }
 
 function initializeStatistics() {
+  window.currentTeachersData = teachers;
   populateStatisticsTable(teachers);
 
   initializeSorting(sortStatisticsTable);
 }
 
+function updateStatisticsWithFilteredData(filteredTeachers) {
+  window.currentTeachersData = filteredTeachers;
+
+  populateStatisticsTable(filteredTeachers, 1);
+
+  updateUserCountIndicators(filteredTeachers.length, teachers.length);
+}
+
+function updateUserCountIndicators(filteredCount, totalCount) {
+  const teachersSectionTitle = document.querySelector(".teachers__title");
+  if (teachersSectionTitle) {
+    teachersSectionTitle.textContent = `Teachers (${filteredCount} of ${totalCount})`;
+  }
+}
+
 function sortStatisticsTable(field) {
+  const currentData = window.currentTeachersData || teachers;
+
   currentSort = sortStatisticsTableModule(
-    teachers,
+    currentData,
     field,
     currentSort,
     updateStatisticsTable,
@@ -148,7 +173,7 @@ function sortStatisticsTable(field) {
   );
 }
 
-function handleAddTeacherForm(event) {
+async function handleAddTeacherForm(event) {
   event.preventDefault();
 
   const formData = new FormData(addTeacherForm);
@@ -163,32 +188,78 @@ function handleAddTeacherForm(event) {
 
   const newTeacher = createNewTeacher(validation.data);
 
-  teachers = addTeacherToList(newTeacher, teachers);
+  try {
+    // індикатор завантаження
+    const submitBtn = formFooter.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Збереження...";
 
-  clearAddTeacherForm(addTeacherForm);
+    const savedTeacher = await saveTeacher(newTeacher);
 
-  showSuccessMessage("Teacher added successfully!", formFooter);
+    // додавання вчителя до локального списку
+    teachers = addTeacherToList(savedTeacher, teachers);
 
-  displayTeachers(teachers, (teacher) =>
-    createTeacherCard(teacher, getInitials, (teacher) =>
-      openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
-    )
-  );
+    clearAddTeacherForm(addTeacherForm);
 
-  populateStatisticsTable(teachers);
+    showSuccessMessage("Teacher added successfully!", formFooter);
 
-  initializeFilters(teachers, applyFilters);
+    displayTeachers(teachers, (teacher) =>
+      createTeacherCard(teacher, getInitials, (teacher) =>
+        openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+      )
+    );
 
-  setTimeout(() => {
-    closeModals();
-    const successMessage = formFooter.querySelector(".form-success");
-    if (successMessage) {
-      successMessage.remove();
-    }
-  }, 500);
+    populateStatisticsTable(teachers);
+
+    updateUserCountIndicators(teachers.length, teachers.length);
+
+    initializeFilters(teachers, applyFilters);
+
+    setTimeout(() => {
+      closeModals();
+      const successMessage = formFooter.querySelector(".form-success");
+      if (successMessage) {
+        successMessage.remove();
+      }
+    }, 500);
+  } catch (error) {
+    console.error("Error saving teacher:", error);
+
+    showFormErrors(
+      [{ field: "general", message: "Помилка збереження. Спробуйте ще раз." }],
+      formFooter
+    );
+
+    const submitBtn = formFooter.querySelector('button[type="submit"]');
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Add";
+  }
+}
+
+function handleTeacherCardClick(event) {
+  // знаходження найближчої картки вчителя
+  const teacherCard = event.target.closest(".teacher-card");
+  if (!teacherCard) return;
+
+  const teacherId = teacherCard.dataset.teacherId;
+  if (!teacherId) return;
+
+  // знаходження вчителя за ID
+  const teacher = teachers.find((t) => t.id === teacherId);
+  if (!teacher) return;
+
+  openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper);
 }
 
 function addEventListeners() {
+  if (teachersGrid) {
+    teachersGrid.addEventListener("click", handleTeacherCardClick);
+  }
+
+  if (favoritesList) {
+    favoritesList.addEventListener("click", handleTeacherCardClick);
+  }
+
   const closeButtons = document.querySelectorAll(
     "[data-modal-close], .info-modal__close"
   );
@@ -266,6 +337,94 @@ function addEventListeners() {
       );
     }, 250);
   });
+
+  const loadMoreBtn = document.getElementById("load-more-btn");
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", loadMoreUsers);
+  }
+}
+
+function showErrorMessage(message) {
+  const teachersGrid = document.querySelector(".teachers__grid");
+  if (teachersGrid) {
+    teachersGrid.innerHTML = `<div class="error-message">${message}</div>`;
+  }
+}
+
+function toggleLoadMoreButton(filteredTeachers) {
+  const loadMoreBtn = document.getElementById("load-more-btn");
+  if (!loadMoreBtn) return;
+
+  // чи є активні фільтри
+  const hasActiveFilters =
+    Object.keys(currentFilters).length > 0 || currentSearchQuery.trim() !== "";
+
+  if (hasActiveFilters) {
+    // при фільтрації не відображаю
+    loadMoreBtn.style.display = "none";
+  } else {
+    loadMoreBtn.style.display = "inline-block";
+  }
+}
+
+function showLoadingIndicator() {
+  const teachersGrid = document.querySelector(".teachers__grid");
+  if (teachersGrid) {
+    teachersGrid.innerHTML =
+      '<div class="loading-indicator">Loading users...</div>';
+  }
+}
+
+function hideLoadingIndicator() {
+  const teachersGrid = document.querySelector(".teachers__grid");
+  if (teachersGrid) {
+    const loadingIndicator = teachersGrid.querySelector(".loading-indicator");
+    if (loadingIndicator) {
+      loadingIndicator.remove();
+    }
+  }
+}
+
+async function loadMoreUsers() {
+  try {
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    if (loadMoreBtn) {
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.textContent = "Завантаження...";
+    }
+
+    const { newUsers, newServerTeachers } = await loadMoreData(teachers);
+
+    teachers = [...teachers, ...newUsers, ...newServerTeachers];
+
+    displayTeachers(teachers, (teacher) =>
+      createTeacherCard(teacher, getInitials, (teacher) =>
+        openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper)
+      )
+    );
+
+    window.currentTeachersData = teachers;
+    populateStatisticsTable(teachers, 1);
+
+    updateUserCountIndicators(teachers.length, teachers.length);
+
+    initializeFilters(teachers, applyFilters);
+
+    if (loadMoreBtn) {
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = "Завантажити більше";
+    }
+  } catch (error) {
+    console.error("Error loading more users:", error);
+
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    if (loadMoreBtn) {
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = "Завантажити більше";
+    }
+
+    showErrorMessage("Помилка завантаження користувачів. Спробуйте ще раз.");
+  }
 }
 
 function closeModals() {

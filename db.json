@@ -1,0 +1,32 @@
+{
+  "teachers": [
+    {
+      "id": "id-1760135249963-55c894drpr7",
+      "gender": "male",
+      "title": "",
+      "full_name": "Рудник Богдан",
+      "city": "Київ",
+      "state": "",
+      "country": "Ukraine",
+      "postcode": "",
+      "coordinates": {
+        "latitude": "",
+        "longitude": ""
+      },
+      "timezone": {
+        "offset": "",
+        "description": ""
+      },
+      "email": "rudnikboda@gmail.com",
+      "b_date": "1999-12-31",
+      "age": 26,
+      "phone": "+38(123)433-38-10",
+      "picture_large": "",
+      "picture_thumbnail": "",
+      "favorite": false,
+      "course": "Biology",
+      "bg_color": "#2af1d6",
+      "note": null
+    }
+  ]
+}
