@@ -46,6 +46,15 @@ import {
   showFormErrors,
   showSuccessMessage,
   initializeAddTeacherForm,
+  toggleMap,
+
+  // Chart functionality
+  initializeStatisticsTabs,
+  updateStatisticsChart,
+
+  // Reports functionality
+  initializeReportsTabs,
+  updateReports,
 } from "./site_functions/index.js";
 
 // Глобальні змінні
@@ -107,6 +116,9 @@ async function initApp() {
 
     initializeStatistics();
 
+    initializeStatisticsTabs();
+
+    initializeReportsTabs();
     initializeSearch(applyFilters);
 
     toggleLoadMoreButton(teachers);
@@ -137,6 +149,10 @@ function applyFilters() {
   toggleLoadMoreButton(result.filteredTeachers);
 
   updateStatisticsWithFilteredData(result.filteredTeachers);
+
+  updateStatisticsChart();
+
+  updateReports(result.filteredTeachers);
 }
 
 function initializeStatistics() {
@@ -213,6 +229,10 @@ async function handleAddTeacherForm(event) {
 
     updateUserCountIndicators(teachers.length, teachers.length);
 
+    updateStatisticsChart();
+
+    updateReports(teachers);
+
     initializeFilters(teachers, applyFilters);
 
     setTimeout(() => {
@@ -245,10 +265,17 @@ function handleTeacherCardClick(event) {
   if (!teacherId) return;
 
   // знаходження вчителя за ID
-  const teacher = teachers.find((t) => t.id === teacherId);
+  const teacher = _.find(teachers, (t) => t.id === teacherId);
   if (!teacher) return;
 
   openTeacherInfoModal(teacher, updateTeacherInfoModalWrapper);
+}
+
+function handleTeacherInfoModalClick(event) {
+  if (event.target.classList.contains("teacher-info__map-toggle")) {
+    event.preventDefault();
+    toggleMap();
+  }
 }
 
 function addEventListeners() {
@@ -263,14 +290,14 @@ function addEventListeners() {
   const closeButtons = document.querySelectorAll(
     "[data-modal-close], .info-modal__close"
   );
-  closeButtons.forEach((btn) => {
+  _.forEach(closeButtons, (btn) => {
     btn.addEventListener("click", closeModals);
   });
 
   const backdrops = document.querySelectorAll(
     ".info-modal__backdrop, .add-modal__backdrop"
   );
-  backdrops.forEach((backdrop) => {
+  _.forEach(backdrops, (backdrop) => {
     backdrop.addEventListener("click", closeModals);
   });
 
@@ -281,7 +308,7 @@ function addEventListeners() {
   });
 
   const addTeacherBtns = document.querySelectorAll(".navigation__add-btn");
-  addTeacherBtns.forEach((btn) => {
+  _.forEach(addTeacherBtns, (btn) => {
     btn.addEventListener("click", () => {
       if (addTeacherModal) {
         addTeacherModal.style.display = "block";
@@ -293,7 +320,7 @@ function addEventListeners() {
           const existingMessages = formFooter.querySelectorAll(
             ".form-error, .form-success"
           );
-          existingMessages.forEach((msg) => msg.remove());
+          _.forEach(existingMessages, (msg) => msg.remove());
         }
       }
     });
@@ -301,6 +328,10 @@ function addEventListeners() {
 
   if (addTeacherForm) {
     addTeacherForm.addEventListener("submit", handleAddTeacherForm);
+  }
+
+  if (teacherInfoModal) {
+    teacherInfoModal.addEventListener("click", handleTeacherInfoModalClick);
   }
 
   const prevArrow = document.querySelector(".favorites__arrow--prev");
@@ -407,6 +438,10 @@ async function loadMoreUsers() {
     populateStatisticsTable(teachers, 1);
 
     updateUserCountIndicators(teachers.length, teachers.length);
+
+    updateStatisticsChart();
+
+    updateReports(teachers);
 
     initializeFilters(teachers, applyFilters);
 

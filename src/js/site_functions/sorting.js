@@ -20,7 +20,7 @@ export function sortStatisticsTable(
   updateStatisticsTable,
   updateSortIndicators
 ) {
-  let newSort = { ...currentSort };
+  let newSort = _.clone(currentSort);
   if (newSort.field === field) {
     newSort.direction = newSort.direction === "asc" ? "desc" : "asc";
   } else {
@@ -28,24 +28,7 @@ export function sortStatisticsTable(
     newSort.direction = "asc";
   }
 
-  const sortedTeachers = [...teachers].sort((a, b) => {
-    let aValue = a[field];
-    let bValue = b[field];
-
-    if (field === "age") {
-      aValue = Number(aValue) || 0;
-      bValue = Number(bValue) || 0;
-    } else {
-      aValue = String(aValue || "").toLowerCase();
-      bValue = String(bValue || "").toLowerCase();
-    }
-
-    if (newSort.direction === "asc") {
-      return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
-    } else {
-      return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
-    }
-  });
+  const sortedTeachers = _.orderBy(teachers, [field], [newSort.direction]);
 
   updateStatisticsTable(sortedTeachers);
 

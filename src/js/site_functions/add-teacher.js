@@ -10,17 +10,17 @@ export function validateAddTeacherForm(formData, existingTeachers = []) {
   const errors = [];
   const data = {};
 
-  const name = formData.get("name")?.trim();
-  if (!name) {
+  const name = _.trim(formData.get("name"));
+  if (_.isEmpty(name)) {
     errors.push("Name is required");
-  } else if (name.length < 2) {
+  } else if (_.size(name) < 2) {
     errors.push("Name must be at least 2 characters long");
   } else {
     data.full_name = name;
   }
 
   const specialty = formData.get("specialty");
-  if (!specialty) {
+  if (_.isEmpty(specialty)) {
     errors.push("Specialty is required");
   } else {
     data.course = specialty;
@@ -31,19 +31,18 @@ export function validateAddTeacherForm(formData, existingTeachers = []) {
     data.country = country;
   }
 
-  const city = formData.get("city")?.trim();
+  const city = _.trim(formData.get("city"));
   if (city) {
     data.city = city;
   }
 
-  const email = formData.get("email")?.trim();
+  const email = _.trim(formData.get("email"));
   if (email) {
     if (!isValidEmail(email)) {
       errors.push("Invalid email format");
     } else {
-      const emailExists = existingTeachers.some(
-        (teacher) =>
-          teacher.email && teacher.email.toLowerCase() === email.toLowerCase()
+      const emailExists = _.some(existingTeachers, (teacher) =>
+        _.isEqual(_.toLower(teacher.email), _.toLower(email))
       );
       if (emailExists) {
         errors.push("Email already exists");

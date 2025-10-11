@@ -9,6 +9,39 @@
     <title>Teachinder</title>
 
     <link rel="stylesheet" href="./css/main.min.css" />
+
+    <!-- Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <!-- Chart.js -->
+    <script src="
+https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js
+"></script>
+
+    <!-- Lodash -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+    <!-- Day.js -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+
+    <!-- WebDataRocks -->
+    <link
+      href="https://cdn.webdatarocks.com/latest/webdatarocks.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.webdatarocks.com/latest/webdatarocks.toolbar.min.js"></script>
+    <script src="https://cdn.webdatarocks.com/latest/webdatarocks.js"></script>
   </head>
 
   <body itemscope itemtype="http://schema.org/WebPage" class="container">
@@ -137,65 +170,127 @@
     <section id="statistics" class="statistics">
       <h2 class="statistics__title h-title">Statistics</h2>
 
-      <div class="statistics__table">
-        <div class="statistics-table__scroll">
-          <table class="statistics-table">
-            <thead class="statistics-table__head">
-              <tr>
-                <th scope="col" class="sortable" data-sort="full_name">
-                  <span class="statistics-table__th-text">
-                    Name
-                    <span class="sort-indicator">↓</span>
-                  </span>
-                </th>
-                <th scope="col" class="sortable" data-sort="course">
-                  <span class="statistics-table__th-text">
-                    Speciality
-                    <span class="sort-indicator">↓</span>
-                  </span>
-                </th>
-                <th scope="col" class="sortable" data-sort="age">
-                  <span class="statistics-table__th-text">
-                    Age
-                    <span class="sort-indicator">↓</span>
-                  </span>
-                </th>
-                <th scope="col" class="sortable" data-sort="gender">
-                  <span class="statistics-table__th-text">
-                    Gender
-                    <span class="sort-indicator">↓</span>
-                  </span>
-                </th>
-                <th scope="col" class="sortable" data-sort="country">
-                  <span class="statistics-table__th-text">
-                    Nationality
-                    <span class="sort-indicator">↓</span>
-                  </span>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="statistics-table__body" id="statistics-table-body">
-              <!-- Дані -->
-            </tbody>
-          </table>
-        </div>
+      <!-- Statistics Tabs -->
+      <div class="statistics__tabs">
+        <button
+          class="statistics__tab statistics__tab--active"
+          data-tab="table"
+        >
+          Table View
+        </button>
+        <button class="statistics__tab" data-tab="chart">Chart View</button>
+        <button class="statistics__tab" data-tab="reports">Reports View</button>
+      </div>
 
-        <div class="pagination">
-          <ul class="pagination__list">
-            <li class="pagination__item is-current">
-              <a class="pagination__link" href="#">1</a>
-            </li>
-            <li class="pagination__item">
-              <a class="pagination__link" href="#">2</a>
-            </li>
-            <li class="pagination__item">
-              <a class="pagination__link" href="#">3</a>
-            </li>
-            <li class="pagination__item pagination__ellipsis">…</li>
-            <li class="pagination__item">
-              <a class="pagination__link" href="#">Last</a>
-            </li>
-          </ul>
+      <!-- Table View -->
+      <div
+        class="statistics__content statistics__content--table"
+        id="statistics-table-view"
+      >
+        <div class="statistics__table">
+          <div class="statistics-table__scroll">
+            <table class="statistics-table">
+              <thead class="statistics-table__head">
+                <tr>
+                  <th scope="col" class="sortable" data-sort="full_name">
+                    <span class="statistics-table__th-text">
+                      Name
+                      <span class="sort-indicator">↓</span>
+                    </span>
+                  </th>
+                  <th scope="col" class="sortable" data-sort="course">
+                    <span class="statistics-table__th-text">
+                      Speciality
+                      <span class="sort-indicator">↓</span>
+                    </span>
+                  </th>
+                  <th scope="col" class="sortable" data-sort="age">
+                    <span class="statistics-table__th-text">
+                      Age
+                      <span class="sort-indicator">↓</span>
+                    </span>
+                  </th>
+                  <th scope="col" class="sortable" data-sort="gender">
+                    <span class="statistics-table__th-text">
+                      Gender
+                      <span class="sort-indicator">↓</span>
+                    </span>
+                  </th>
+                  <th scope="col" class="sortable" data-sort="country">
+                    <span class="statistics-table__th-text">
+                      Nationality
+                      <span class="sort-indicator">↓</span>
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="statistics-table__body" id="statistics-table-body">
+                <!-- Дані -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <ul class="pagination__list">
+              <li class="pagination__item is-current">
+                <a class="pagination__link" href="#">1</a>
+              </li>
+              <li class="pagination__item">
+                <a class="pagination__link" href="#">2</a>
+              </li>
+              <li class="pagination__item">
+                <a class="pagination__link" href="#">3</a>
+              </li>
+              <li class="pagination__item pagination__ellipsis">…</li>
+              <li class="pagination__item">
+                <a class="pagination__link" href="#">Last</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div
+        class="statistics__content statistics__content--chart"
+        id="statistics-chart-view"
+        style="display: none"
+      >
+        <div class="statistics__chart-container">
+          <canvas id="statistics-pie-chart" width="400" height="400"></canvas>
+        </div>
+      </div>
+
+      <!-- Reports -->
+      <div
+        class="statistics__content statistics__content--reports"
+        id="statistics-reports-view"
+        style="display: none"
+      >
+        <div class="statistics__reports-container">
+          <div class="statistics__reports-tabs">
+            <button
+              class="statistics__reports-tab statistics__reports-tab--active"
+              data-report="countries"
+            >
+              Countries Report
+            </button>
+            <button class="statistics__reports-tab" data-report="teachers">
+              Teachers Table
+            </button>
+          </div>
+
+          <div class="statistics__reports-content">
+            <div
+              id="countries-report"
+              class="statistics__report statistics__report--active"
+            >
+              <div id="webdatarocks-countries"></div>
+            </div>
+            <div id="teachers-report" class="statistics__report">
+              <div id="webdatarocks-teachers"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -426,7 +521,22 @@
             <!-- Біографія -->
           </p>
 
-          <a href="#" class="teacher-info__map-link">toggle map</a>
+          <div class="teacher-info__birthday">
+            <!-- скільки до дня народження -->
+          </div>
+
+          <div class="teacher-info__map-section">
+            <button class="teacher-info__map-toggle" type="button">
+              Toggle Map
+            </button>
+            <div
+              class="teacher-info__map-container"
+              id="teacher-map"
+              style="display: none"
+            >
+              <!-- Карта буде відображена тут -->
+            </div>
+          </div>
         </div>
       </div>
     </div>

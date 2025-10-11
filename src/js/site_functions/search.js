@@ -1,22 +1,18 @@
 export function searchTeachers(teachers, query) {
-  if (!query || query.trim() === "") {
+  if (_.isEmpty(query) || _.trim(query) === "") {
     return teachers;
   }
 
-  const searchTerm = query.toLowerCase().trim();
+  const searchTerm = _.toLower(_.trim(query));
 
-  return teachers.filter((teacher) => {
-    // Пошук по імені
-    const nameMatch = teacher.full_name.toLowerCase().includes(searchTerm);
+  return _.filter(teachers, (teacher) => {
+    const searchFields = [
+      _.toLower(teacher.full_name),
+      _.toLower(teacher.note || ""),
+      _.toString(teacher.age || ""),
+    ];
 
-    // Пошук по коментарю
-    const noteMatch =
-      teacher.note && teacher.note.toLowerCase().includes(searchTerm);
-
-    // Пошук по віку
-    const ageMatch = teacher.age && teacher.age.toString().includes(searchTerm);
-
-    return nameMatch || noteMatch || ageMatch;
+    return _.some(searchFields, (field) => _.includes(field, searchTerm));
   });
 }
 

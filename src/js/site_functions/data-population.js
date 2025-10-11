@@ -110,15 +110,24 @@ export function populateStatisticsTable(teachers, page = 1) {
 
   const fragment = document.createDocumentFragment();
 
-  teachersForPage.forEach((teacher) => {
+  _.forEach(teachersForPage, (teacher) => {
     const row = document.createElement("tr");
 
+    const teacherData = _.pick(teacher, [
+      "full_name",
+      "course",
+      "age",
+      "gender",
+      "country",
+    ]);
+    const rowData = _.mapValues(teacherData, (value) => value || "N/A");
+
     row.innerHTML = `
-      <td>${teacher.full_name || "N/A"}</td>
-      <td>${teacher.course || "N/A"}</td>
-      <td>${teacher.age || "N/A"}</td>
-      <td>${teacher.gender || "N/A"}</td>
-      <td>${teacher.country || "N/A"}</td>
+      <td>${rowData.full_name}</td>
+      <td>${rowData.course}</td>
+      <td>${rowData.age}</td>
+      <td>${rowData.gender}</td>
+      <td>${rowData.country}</td>
     `;
 
     fragment.appendChild(row);

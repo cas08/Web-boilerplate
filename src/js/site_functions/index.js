@@ -38,3 +38,24 @@ export {
   showSuccessMessage,
   initializeAddTeacherForm,
 } from "./add-teacher.js";
+
+export { toggleMap } from "./map-functions.js";
+
+export {
+  initializeStatisticsTabs,
+  createStatisticsPieChart,
+  updateStatisticsChart,
+} from "./chart-functions.js";
+
+export {
+  getDaysUntilBirthday,
+  formatBirthdayCountdown,
+  getTeacherBirthdayCountdown,
+} from "./birthday-functions.js";
+
+export {
+  initializeReportsTabs,
+  createCountriesReport,
+  createTeachersReport,
+  updateReports,
+} from "./reports-functions.js";
