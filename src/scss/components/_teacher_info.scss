@@ -153,16 +153,53 @@
     line-height: 1.5;
   }
 
-  &__map-link {
+  &__map-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  &__map-toggle {
     display: inline-block;
     font-size: 0.92rem;
     color: $info-color;
     text-decoration: none;
     border-bottom: dashed 1px $info-color;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 
     &:hover,
     &:focus {
       color: darken($color: $info-color, $amount: 10%);
+    }
+  }
+
+  &__map-container {
+    margin-top: 12px;
+    height: 300px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+  }
+}
+
+.map-popup {
+  h4 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+  }
+
+  p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: #666;
+
+    strong {
+      color: #333;
     }
   }
 }
@@ -186,5 +223,21 @@
       font-size: 1.35rem;
       text-align: left;
     }
+  }
+}
+
+.teacher-info__birthday {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 2px solid rgba($info-color, 0.2);
+  text-align: center;
+
+  &-content {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $info-color;
+    margin: 0;
+    line-height: 1.4;
   }
 }

@@ -1,3 +1,5 @@
+import { getTeacherBirthdayCountdown } from "./birthday-functions.js";
+
 export function toggleFavorite(
   teacher,
   teachers,
@@ -7,7 +9,7 @@ export function toggleFavorite(
 ) {
   teacher.favorite = !teacher.favorite;
 
-  const teacherIndex = teachers.findIndex((t) => t.id === teacher.id);
+  const teacherIndex = _.findIndex(teachers, (t) => t.id === teacher.id);
   if (teacherIndex !== -1) {
     teachers[teacherIndex].favorite = teacher.favorite;
   }
@@ -53,7 +55,7 @@ export function updateFavoritesDisplay(teachers, createTeacherCard) {
   const favoritesList = document.querySelector(".favorites__list");
   if (!favoritesList) return;
 
-  const favoriteTeachers = teachers.filter((teacher) =>
+  const favoriteTeachers = _.filter(teachers, (teacher) =>
     Boolean(teacher.favorite)
   );
 
@@ -68,7 +70,7 @@ export function updateFavoritesDisplay(teachers, createTeacherCard) {
 
   const fragment = document.createDocumentFragment();
 
-  teachersToShow.forEach((teacher) => {
+  _.forEach(teachersToShow, (teacher) => {
     const listItem = document.createElement("li");
     listItem.className = "favorites__item";
 
@@ -111,7 +113,7 @@ function updateCarouselArrows(totalItems) {
 }
 
 export function nextCarouselPage(teachers, createTeacherCard) {
-  const favoriteTeachers = teachers.filter((teacher) =>
+  const favoriteTeachers = _.filter(teachers, (teacher) =>
     Boolean(teacher.favorite)
   );
   const itemsPerPage = getItemsPerPage();
@@ -141,18 +143,19 @@ export function loadFavorites(teachers, updateFavoritesDisplay) {
   if (savedFavorites) {
     const favoriteIds = JSON.parse(savedFavorites);
     console.log("Loading favorites from localStorage:", favoriteIds);
-    teachers.forEach((teacher) => {
-      teacher.favorite = favoriteIds.includes(teacher.id);
+    _.forEach(teachers, (teacher) => {
+      teacher.favorite = _.includes(favoriteIds, teacher.id);
     });
   } else {
-    const initialFavorites = teachers.filter(
+    const initialFavorites = _.filter(
+      teachers,
       (teacher) => teacher.favorite === true
     );
     if (initialFavorites.length > 0) {
       console.log(
         `Found ${initialFavorites.length} teachers marked as favorites in initial data:`
       );
-      initialFavorites.forEach((teacher) => {
+      _.forEach(initialFavorites, (teacher) => {
         console.log(`- ${teacher.full_name} (ID: ${teacher.id})`);
       });
     } else {
@@ -182,6 +185,9 @@ export function updateTeacherInfoModal(teacher, getInitials, toggleFavorite) {
   const specialty = teacherInfoModal.querySelector(".teacher-info__specialty");
   const meta = teacherInfoModal.querySelector(".teacher-info__meta");
   const bio = teacherInfoModal.querySelector(".teacher-info__bio");
+  const birthday = teacherInfoModal.querySelector(".teacher-info__birthday");
+  const mapToggle = teacherInfoModal.querySelector(".teacher-info__map-toggle");
+  const mapContainer = document.getElementById("teacher-map");
 
   if (title) title.textContent = teacher.full_name;
 
@@ -224,6 +230,33 @@ export function updateTeacherInfoModal(teacher, getInitials, toggleFavorite) {
     bio.textContent =
       teacher.note ||
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab autem consectetur culpa cumque, distinctio dolor dolore dolorem doloremque ea explicabo facilis nam necessitatibus nisi pariatur perspiciatis porro quis similique temporibus velitam veritatis? Ab ad, aliquam amet consectetur cupiditate debitis deserunt doloribus dolorum earum eius eos minus nostrum odio omnis perferendis...";
+  }
+
+  // скільки до дня народження
+  if (birthday) {
+    const birthdayCountdown = getTeacherBirthdayCountdown(teacher);
+    birthday.innerHTML = `<div class="teacher-info__birthday-content">${birthdayCountdown}</div>`;
+  }
+
+  // налаштування карти
+  if (mapToggle && mapContainer) {
+    const hasCoordinates =
+      teacher.coordinates &&
+      teacher.coordinates.latitude &&
+      teacher.coordinates.longitude &&
+      teacher.coordinates.latitude !== "" &&
+      teacher.coordinates.longitude !== "";
+
+    if (hasCoordinates) {
+      mapToggle.style.display = "block";
+
+      mapContainer.style.display = "none";
+
+      window.currentTeacher = teacher;
+    } else {
+      mapToggle.style.display = "none";
+      mapContainer.style.display = "none";
+    }
   }
 }
 

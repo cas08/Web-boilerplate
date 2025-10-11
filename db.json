@@ -10,8 +10,8 @@
       "country": "Ukraine",
       "postcode": "",
       "coordinates": {
-        "latitude": "",
-        "longitude": ""
+        "latitude": "50.4501",
+        "longitude": "30.5234"
       },
       "timezone": {
         "offset": "",
@@ -27,6 +27,62 @@
       "course": "Biology",
       "bg_color": "#2af1d6",
       "note": null
+    },
+    {
+      "id": "id-1760135249964-55c894drpr8",
+      "gender": "female",
+      "title": "",
+      "full_name": "Шевченко Олена",
+      "city": "Львів",
+      "state": "",
+      "country": "Ukraine",
+      "postcode": "",
+      "coordinates": {
+        "latitude": "49.8397",
+        "longitude": "24.0297"
+      },
+      "timezone": {
+        "offset": "",
+        "description": ""
+      },
+      "email": "shev.olena@gmail.com",
+      "b_date": "1985-05-15",
+      "age": 39,
+      "phone": "+38(067)123-45-67",
+      "picture_large": "",
+      "picture_thumbnail": "",
+      "favorite": false,
+      "course": "Mathematics",
+      "bg_color": "#ff6b6b",
+      "note": "Крута викладачка математики"
+    },
+    {
+      "id": "id-1760135249965-55c894drpr9",
+      "gender": "male",
+      "title": "",
+      "full_name": "Коваленко Андрій",
+      "city": "Харків",
+      "state": "",
+      "country": "Ukraine",
+      "postcode": "",
+      "coordinates": {
+        "latitude": "49.9935",
+        "longitude": "36.2304"
+      },
+      "timezone": {
+        "offset": "",
+        "description": ""
+      },
+      "email": "kovalenko.andriy@gmail.com",
+      "b_date": "1992-08-22",
+      "age": 32,
+      "phone": "+38(050)987-65-43",
+      "picture_large": "",
+      "picture_thumbnail": "",
+      "favorite": false,
+      "course": "Computer Science",
+      "bg_color": "#4ecdc4",
+      "note": "Ші спец"
     }
   ]
 }
